@@ -1,0 +1,6 @@
+{
+  "name": "INCA Kahoot! - Saúde e Prevenção do Câncer",
+  "description": "Jogo interativo em tempo real no estilo Kahoot sobre saúde e prevenção do câncer com perguntas baseadas nas diretrizes do INCA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
