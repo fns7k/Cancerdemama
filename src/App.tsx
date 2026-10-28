@@ -26,6 +26,7 @@ export default function App() {
 
   const {
     isConnected,
+    engineMode,
     roomState,
     playerId,
     playerInfo,
@@ -39,6 +40,7 @@ export default function App() {
     playerJoin,
     playerSubmitAnswer,
     playerLeave,
+    forceLocalMode,
   } = useGameSocket();
 
   // Create room once connected if no room exists yet
@@ -47,6 +49,16 @@ export default function App() {
       hostCreateRoom();
     }
   }, [isConnected, roomState, hostCreateRoom]);
+
+  // Fail-safe for Vercel/serverless: if after 1.2s no room was created, force local mode immediately
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!roomState) {
+        forceLocalMode();
+      }
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, [roomState, forceLocalMode]);
 
   const handleToggleSound = () => {
     const next = sounds.toggleMute();
@@ -57,13 +69,32 @@ export default function App() {
     <div className="min-h-screen bg-slate-100 flex flex-col text-slate-900 font-sans selection:bg-purple-200">
       {/* Top Bar Contract: 3 zones separated by gap-8 */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-8 py-3.5 flex items-center justify-between gap-8">
-        {/* Zone 1: Wordmark */}
+        {/* Zone 1: Wordmark & Status Badge */}
         <div className="flex items-center gap-2.5 whitespace-nowrap shrink-0">
           <div className="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black text-sm shadow-sm shadow-purple-600/30">
             🎗️
           </div>
           <span className="text-lg font-black tracking-tight text-slate-900 font-display">
             INCA Kahoot!
+          </span>
+          <span
+            className={`hidden lg:inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
+              engineMode === 'websocket'
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                : 'bg-purple-50 text-purple-700 border-purple-200'
+            }`}
+            title={
+              engineMode === 'websocket'
+                ? 'Conectado via WebSocket'
+                : 'Modo Vercel / Local ativo'
+            }
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                engineMode === 'websocket' ? 'bg-emerald-500 animate-pulse' : 'bg-purple-600 animate-pulse'
+              }`}
+            />
+            {engineMode === 'websocket' ? 'Servidor Ativo' : 'Vercel / Local Ativo'}
           </span>
         </div>
 
@@ -208,6 +239,10 @@ export default function App() {
             onShowLeaderboard={hostShowLeaderboard}
             onRestart={hostRestart}
             onOpenGuidelines={() => setIsGuidelinesOpen(true)}
+            onForceCreateRoom={() => {
+              forceLocalMode();
+              hostCreateRoom();
+            }}
           />
         )}
 
@@ -243,6 +278,10 @@ export default function App() {
                 onShowLeaderboard={hostShowLeaderboard}
                 onRestart={hostRestart}
                 onOpenGuidelines={() => setIsGuidelinesOpen(true)}
+                onForceCreateRoom={() => {
+                  forceLocalMode();
+                  hostCreateRoom();
+                }}
               />
             </div>
 

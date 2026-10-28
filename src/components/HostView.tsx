@@ -85,6 +85,7 @@ interface Props {
   onShowLeaderboard: (pin: string) => void;
   onRestart: (pin: string) => void;
   onOpenGuidelines: () => void;
+  onForceCreateRoom?: () => void;
 }
 
 function AnimatedScoreCounter({ target, startFrom }: { target: number; startFrom: number }) {
@@ -122,6 +123,7 @@ export function HostView({
   onShowLeaderboard,
   onRestart,
   onOpenGuidelines,
+  onForceCreateRoom,
 }: Props) {
   const [copied, setCopied] = React.useState(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
@@ -182,10 +184,22 @@ export function HostView({
 
   if (!roomState) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8 max-w-md mx-auto animate-fadeIn">
         <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mb-4" />
         <h2 className="text-xl font-bold text-slate-800">Conectando à Sala do Kahoot...</h2>
-        <p className="text-sm text-slate-500 mt-1">Carregando servidor em tempo real</p>
+        <p className="text-xs text-slate-500 mt-1 mb-6">
+          Carregando ambiente em tempo real (compatível com Vercel e servidores Node)
+        </p>
+
+        {onForceCreateRoom && (
+          <button
+            onClick={onForceCreateRoom}
+            className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-black uppercase tracking-wider shadow-md shadow-purple-600/30 transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+          >
+            <Sparkles className="w-4 h-4" />
+            Iniciar Sala Imediatamente
+          </button>
+        )}
       </div>
     );
   }

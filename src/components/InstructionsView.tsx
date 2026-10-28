@@ -253,6 +253,23 @@ export function InstructionsView({
         </div>
       </div>
 
+      {/* Deployment & Vercel Compatibility Note */}
+      <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg shrink-0">
+            ⚡
+          </div>
+          <div>
+            <h4 className="font-extrabold text-slate-900 text-sm">
+              Compatibilidade Total com Vercel, Servidores e Modo Offline
+            </h4>
+            <p className="text-xs text-slate-600 mt-0.5">
+              O sistema possui um motor híbrido inteligente: se hospedado na Vercel (onde servidores WebSocket contínuos não rodam), o jogo ativa automaticamente o modo direto com sincronização entre abas via <strong>BroadcastChannel</strong> e suporte a jogadores virtuais, sem nunca travar ou carregar infinitamente.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Guidelines Button banner */}
       <div className="flex flex-col sm:flex-row items-center justify-between p-5 rounded-2xl bg-purple-50 border border-purple-200 text-xs text-purple-900 gap-4">
         <div className="flex items-center gap-3">
