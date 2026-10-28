@@ -1,3 +1,5 @@
+process.env.VITE_CONFIG_NATIVE_IGNORE_WARNING = 'true';
+
 import express from 'express';
 import http from 'http';
 import path from 'path';

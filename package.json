@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx server.ts",
-    "build": "vite build",
+    "dev": "VITE_CONFIG_NATIVE_IGNORE_WARNING=true tsx server.ts",
+    "build": "VITE_CONFIG_NATIVE_IGNORE_WARNING=true vite build",
     "start": "tsx server.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
